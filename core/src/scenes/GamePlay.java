@@ -1,6 +1,7 @@
 package scenes;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jackthegiant.GameMain;
 
-import clouds.Cloud;
+import Player.Player;
 import clouds.CloudsController;
 import helpers.GameInfo;
 
@@ -31,6 +32,7 @@ public class GamePlay implements Screen {
     private Sprite[] bgs;
     private float lastYPosition;
     private CloudsController cloudsController;
+    private Player player;
 
     public GamePlay(GameMain game) {
         this.game = game;
@@ -50,11 +52,13 @@ public class GamePlay implements Screen {
 
         this.cloudsController = new CloudsController(this.world);
 
+        this.player = this.cloudsController.positionPlayer();
+
         this.createBackgrounds();
     }
 
     void update(float dt) {
-        this.moveCamera();
+        //this.moveCamera();
         this.checkBackgroundsOutOfBounds();
         this.cloudsController.setCameraY(mainCamera.position.y);
         this.cloudsController.createAndArrangeNewClouds();
@@ -110,6 +114,7 @@ public class GamePlay implements Screen {
 
         this.drawBackgrounds();
         this.cloudsController.drawClouds(this.game.getBatch());
+        this.player.drawPlayer(this.game.getBatch());
 
         this.game.getBatch().end();
 
@@ -117,6 +122,8 @@ public class GamePlay implements Screen {
 
         this.game.getBatch().setProjectionMatrix(this.mainCamera.combined);
         this.mainCamera.update();
+        this.player.updatePlayer();
+        this.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
     }
 
     @Override

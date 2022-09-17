@@ -1,7 +1,8 @@
-package clouds;
+package Player;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -11,26 +12,21 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import helpers.GameInfo;
 
-public class Cloud extends Sprite {
+public class Player extends Sprite {
     private World world;
     private Body body;
-    private String cloudName;
 
-    public Cloud(World world, String cloudName) {
-        super(new Texture("Clouds/" + cloudName + ".png"));
-
+    public Player(World world, float x, float y) {
+        super(new Texture("Player/Player 1.png"));
         this.world = world;
-        this.cloudName = cloudName;
+        super.setPosition(x, y);
+        this.createBody();
     }
 
     void createBody() {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-
-        float centerXOffset = 50f;
-        float centerX = (super.getX() - centerXOffset) / GameInfo.PPM;
-        float centerY = (super.getY()) / GameInfo.PPM;
-        bodyDef.position.set(centerX, centerY);
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(super.getX() / GameInfo.PPM, super.getY() / GameInfo.PPM);
 
         this.body = this.world.createBody(bodyDef);
 
@@ -39,6 +35,8 @@ public class Cloud extends Sprite {
         shape.setAsBox((super.getWidth() / 2f - boxWidthOffset) / GameInfo.PPM, (super.getHeight() / 2f) / GameInfo.PPM);
 
         FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.density = 4; // the mass of the body
+        fixtureDef.friction = 2; // will make player slide on surfaces
         fixtureDef.shape = shape;
 
         Fixture fixture = this.body.createFixture(fixtureDef);
@@ -46,12 +44,11 @@ public class Cloud extends Sprite {
         shape.dispose();
     }
 
-    public void setSpritePosition(float x, float y) {
-        super.setPosition(x, y);
-        this.createBody();
+    public void drawPlayer(SpriteBatch batch) {
+        batch.draw(this, super.getX() + super.getWidth() / 2f, super.getY() - super.getHeight() / 2f);
     }
 
-    public String getCloudName() {
-        return cloudName;
+    public void updatePlayer() {
+        super.setPosition(this.body.getPosition().x * GameInfo.PPM, this.body.getPosition().y * GameInfo.PPM);
     }
 }
