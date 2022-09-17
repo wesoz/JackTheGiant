@@ -5,11 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jackthegiant.GameMain;
 
+import clouds.Cloud;
 import helpers.GameInfo;
 
 public class GamePlay implements Screen {
@@ -17,8 +21,16 @@ public class GamePlay implements Screen {
     private GameMain game;
     private OrthographicCamera mainCamera;
     private Viewport gameViewport;
+
+    private OrthographicCamera box2DCamera;
+    private Box2DDebugRenderer debugRenderer;
+
+    private World world;
+
     private Sprite[] bgs;
     private float lastYPosition;
+
+    Cloud c;
 
     public GamePlay(GameMain game) {
         this.game = game;
@@ -28,11 +40,22 @@ public class GamePlay implements Screen {
 
         this.gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, this.mainCamera);
 
+        this.box2DCamera = new OrthographicCamera();
+        this.box2DCamera.setToOrtho(false, GameInfo.WIDTH / GameInfo.PPM, GameInfo.HEIGHT / GameInfo.PPM);
+        this.box2DCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
+
+        this.debugRenderer = new Box2DDebugRenderer();
+
+        this.world = new World(new Vector2(0, -9.8f), true);
+
+        this.c = new Cloud(this.world, "Cloud 1");
+        c.setSpritePosition(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f);
+
         this.createBackgrounds();
     }
 
     void update(float dt) {
-        this.moveCamera();
+        //this.moveCamera();
         this.checkBackgroundsOutOfBounds();
     }
 
@@ -85,8 +108,11 @@ public class GamePlay implements Screen {
         this.game.getBatch().begin();
 
         this.drawBackgrounds();
+        this.game.getBatch().draw(this.c.getTexture(), this.c.getX() - this.c.getWidth() / 2f, this.c.getY() - this.c.getHeight() / 2f);
 
         this.game.getBatch().end();
+
+        this.debugRenderer.render(world, box2DCamera.combined);
 
         this.game.getBatch().setProjectionMatrix(this.mainCamera.combined);
         this.mainCamera.update();

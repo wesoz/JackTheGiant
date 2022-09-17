@@ -27,14 +27,16 @@ public class Cloud extends Sprite {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
-        float centerX = (super.getX() + super.getWidth() / 2f) / GameInfo.PPM;
-        float centerY = (super.getY() + super.getHeight() / 2f) / GameInfo.PPM;
+        float centerXOffset = 40f;
+        float centerX = (super.getX() - centerXOffset) / GameInfo.PPM;
+        float centerY = (super.getY()) / GameInfo.PPM;
         bodyDef.position.set(centerX, centerY);
 
         this.body = this.world.createBody(bodyDef);
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox((super.getWidth() / 2f) / GameInfo.PPM, (super.getHeight() / 2f) / GameInfo.PPM);
+        float boxWidthOffset = 20f;
+        shape.setAsBox((super.getWidth() / 2f - boxWidthOffset) / GameInfo.PPM, (super.getHeight() / 2f) / GameInfo.PPM);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
