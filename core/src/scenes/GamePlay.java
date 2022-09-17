@@ -60,9 +60,11 @@ public class GamePlay implements Screen {
 
     void handleInput(float dt) {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            player.movePlayer(-2f);
+            this.player.movePlayer(-2f);
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            player.movePlayer(2f);
+            this.player.movePlayer(2f);
+        } else {
+            this.player.setWalking(false);
         }
     }
 
@@ -124,7 +126,8 @@ public class GamePlay implements Screen {
 
         this.drawBackgrounds();
         this.cloudsController.drawClouds(this.game.getBatch());
-        this.player.drawPlayer(this.game.getBatch());
+        this.player.drawPlayerIdle(this.game.getBatch());
+        this.player.drawPlayerAnimation(this.game.getBatch());
 
         this.game.getBatch().end();
 
