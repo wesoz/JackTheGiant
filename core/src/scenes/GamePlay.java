@@ -18,6 +18,7 @@ public class GamePlay implements Screen {
     private OrthographicCamera mainCamera;
     private Viewport gameViewport;
     private Sprite[] bgs;
+    private float lastYPosition;
 
     public GamePlay(GameMain game) {
         this.game = game;
@@ -27,17 +28,16 @@ public class GamePlay implements Screen {
 
         this.gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, this.mainCamera);
 
-
-
         this.createBackgrounds();
     }
 
     void update(float dt) {
-        moveCamera();
+        this.moveCamera();
+        this.checkBackgroundsOutOfBounds();
     }
 
     void moveCamera() {
-        this.mainCamera.position.y -= 1;
+        this.mainCamera.position.y -= 3;
     }
 
     void createBackgrounds() {
@@ -46,12 +46,27 @@ public class GamePlay implements Screen {
         for (int i = 0; i < bgs.length; i++) {
             bgs[i] = new Sprite(new Texture("Backgrounds/Game BG.png"));
             bgs[i].setPosition(0, -(i * bgs[i].getHeight()));
+            lastYPosition = Math.abs(bgs[i].getY());
         }
     }
 
     void drawBackgrounds() {
         for (int i = 0; i < bgs.length; i++) {
             this.game.getBatch().draw(bgs[i], bgs[i].getX(), bgs[i].getY());
+        }
+    }
+
+    void checkBackgroundsOutOfBounds() {
+        for (int i = 0; i < bgs.length; i++) {
+            // Not using this offset will cause the top of the screen to show a
+            // red(clear) line before moving the bg to the bottom because
+            // the image is not fully ou of screen yet
+            float outOfScreenOffset = 5f;
+            if ((bgs[i].getY() - bgs[i].getHeight() / 2f - outOfScreenOffset) > mainCamera.position.y) {
+                float newPosition = bgs[i].getHeight() + lastYPosition;
+                bgs[i].setPosition(0, -newPosition);
+                lastYPosition = Math.abs(newPosition);
+            }
         }
     }
 
