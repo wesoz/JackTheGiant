@@ -2,6 +2,7 @@ package scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -57,7 +58,16 @@ public class GamePlay implements Screen {
         this.createBackgrounds();
     }
 
+    void handleInput(float dt) {
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            player.movePlayer(-2f);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            player.movePlayer(2f);
+        }
+    }
+
     void update(float dt) {
+        this.handleInput(dt);
         //this.moveCamera();
         this.checkBackgroundsOutOfBounds();
         this.cloudsController.setCameraY(mainCamera.position.y);

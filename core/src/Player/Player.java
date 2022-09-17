@@ -29,6 +29,7 @@ public class Player extends Sprite {
         bodyDef.position.set(super.getX() / GameInfo.PPM, super.getY() / GameInfo.PPM);
 
         this.body = this.world.createBody(bodyDef);
+        this.body.setFixedRotation(true);
 
         PolygonShape shape = new PolygonShape();
         float boxWidthOffset = 20f;
@@ -45,7 +46,11 @@ public class Player extends Sprite {
     }
 
     public void drawPlayer(SpriteBatch batch) {
-        batch.draw(this, super.getX() + super.getWidth() / 2f, super.getY() - super.getHeight() / 2f);
+        batch.draw(this, super.getX() - super.getWidth() / 2f, super.getY() - super.getHeight() / 2f);
+    }
+
+    public void movePlayer(float x) {
+        this.body.setLinearVelocity(x, body.getLinearVelocity().y);
     }
 
     public void updatePlayer() {

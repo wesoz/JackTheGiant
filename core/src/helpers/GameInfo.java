@@ -6,5 +6,5 @@ public class GameInfo {
     // Pixels per meter
     // -> This is necessary because libgdx considers 1 pixel is 1 meter.
     // We want to make it 100 pixels = 1 meter
-    public static final int PPM = 100;
+    public static final float PPM = 100;
 }
