@@ -69,9 +69,11 @@ public class CloudsController {
                 if (controlX == 0) {
                     tempX = this.randomBetweenNumber(maxX - 40, maxX);
                     controlX = 1;
+                    c.setDrawLeft(false);
                 } else if (controlX == 1) {
                     tempX = this.randomBetweenNumber(minX + 40, minX);
                     controlX = 0;
+                    c.setDrawLeft(true);
                 }
 
                 c.setSpritePosition(tempX, positionY);
@@ -83,7 +85,11 @@ public class CloudsController {
 
     public void drawClouds(SpriteBatch batch) {
         for (Cloud c: this.clouds) {
-            batch.draw(c.getTexture(), c.getX() - c.getWidth() / 2f, c.getY() - c.getHeight() / 2f);
+            if (c.isDrawLeft()) {
+                batch.draw(c.getTexture(), c.getX() - c.getWidth() / 2f - 20f, c.getY() - c.getHeight() / 2f);
+            } else {
+                batch.draw(c.getTexture(), c.getX() - c.getWidth() / 2f + 10f, c.getY() - c.getHeight() / 2f);
+            }
         }
     }
 
