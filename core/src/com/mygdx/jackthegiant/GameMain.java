@@ -1,18 +1,19 @@
 package com.mygdx.jackthegiant;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-public class GameMain extends ApplicationAdapter {
-	SpriteBatch batch;
+public class GameMain extends Game {
+	private SpriteBatch batch;
 	Texture img;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		img = new Texture("Backgrounds/Game BG.png");
 	}
 
 	@Override
