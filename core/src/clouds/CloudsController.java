@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.Random;
+
 import helpers.GameInfo;
 
 public class CloudsController {
@@ -12,9 +14,13 @@ public class CloudsController {
 
     World world;
     private Array<Cloud> clouds = new Array<Cloud>();
+    private float minX, maxX;
+    private Random random = new Random();
 
     public CloudsController(World world) {
         this.world = world;
+        this.minX = GameInfo.WIDTH / 2f - 110;
+        this.maxX = GameInfo.WIDTH / 2f + 110;
         this.createClouds();
         this.positionClouds();
     }
@@ -45,9 +51,19 @@ public class CloudsController {
         }
 
         float positionY = GameInfo.HEIGHT / 2f;
-        float tempX = GameInfo.WIDTH /2f;
+        int controlX = 0;
 
         for (Cloud c : this.clouds) {
+            float tempX = 0;
+
+            if (controlX == 0) {
+                tempX = this.randomBetweenNumber(maxX - 40, maxX);
+                controlX = 1;
+            } else if (controlX == 1) {
+                tempX = this.randomBetweenNumber(minX + 40, minX);
+                controlX = 0;
+            }
+
             c.setSpritePosition(tempX, positionY);
             positionY -= this.DISTANCE_BETWEEN_CLOUDS;
         }
@@ -57,6 +73,9 @@ public class CloudsController {
         for (Cloud c: this.clouds) {
             batch.draw(c.getTexture(), c.getX() - c.getWidth() / 2f, c.getY() - c.getHeight() / 2f);
         }
+    }
 
+    private float randomBetweenNumber(float min, float max) {
+        return this.random.nextFloat() * (max - min) + min;
     }
 }
