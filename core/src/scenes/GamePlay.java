@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jackthegiant.GameMain;
 
 import clouds.Cloud;
+import clouds.CloudsController;
 import helpers.GameInfo;
 
 public class GamePlay implements Screen {
@@ -29,8 +30,7 @@ public class GamePlay implements Screen {
 
     private Sprite[] bgs;
     private float lastYPosition;
-
-    Cloud c;
+    private CloudsController cloudsController;
 
     public GamePlay(GameMain game) {
         this.game = game;
@@ -48,14 +48,13 @@ public class GamePlay implements Screen {
 
         this.world = new World(new Vector2(0, -9.8f), true);
 
-        this.c = new Cloud(this.world, "Cloud 1");
-        c.setSpritePosition(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f);
+        this.cloudsController = new CloudsController(this.world);
 
         this.createBackgrounds();
     }
 
     void update(float dt) {
-        //this.moveCamera();
+        this.moveCamera();
         this.checkBackgroundsOutOfBounds();
     }
 
@@ -108,7 +107,7 @@ public class GamePlay implements Screen {
         this.game.getBatch().begin();
 
         this.drawBackgrounds();
-        this.game.getBatch().draw(this.c.getTexture(), this.c.getX() - this.c.getWidth() / 2f, this.c.getY() - this.c.getHeight() / 2f);
+        this.cloudsController.drawClouds(this.game.getBatch());
 
         this.game.getBatch().end();
 
