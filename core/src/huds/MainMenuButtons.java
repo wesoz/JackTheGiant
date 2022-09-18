@@ -17,6 +17,7 @@ import com.mygdx.jackthegiant.GameMain;
 import helpers.GameInfo;
 import scenes.GamePlay;
 import scenes.Highscore;
+import scenes.Options;
 
 public class MainMenuButtons {
     private GameMain game;
@@ -73,7 +74,7 @@ public class MainMenuButtons {
         this.optionsBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                MainMenuButtons.this.game.setScreen(new Options(MainMenuButtons.this.game));
             }
         });
         this.quitBtn.addListener(new ChangeListener() {
