@@ -83,7 +83,7 @@ public class CloudsController {
             }
         }
 
-        Collectable c1 = new Collectable(this.world, "Life");
+        Collectable c1 = new Collectable(this.world, "Coin");
         c1.setCollectablePosition(this.clouds.get(1).getX() + this.clouds.get(1).getWidth() / 2f - c1.getWidth() / 2f, this.clouds.get(1).getY() + this.clouds.get(1).getHeight() / 2f + 40f);
         this.collectables.add(c1);
     }

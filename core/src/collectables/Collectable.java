@@ -37,8 +37,11 @@ public class Collectable extends Sprite {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = GameInfo.COLLECTABLE;
+        fixtureDef.isSensor = true;
 
         this.fixture = this.body.createFixture(fixtureDef);
+        this.fixture.setUserData(this.name);
 
         shape.dispose();
     }
