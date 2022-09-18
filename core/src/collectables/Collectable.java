@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -55,5 +56,15 @@ public class Collectable extends Sprite {
         float bodyCenterX = (this.body.getPosition().x * GameInfo.PPM) - super.getWidth() / 2f;
         float bodyCenterY = (this.body.getPosition().y * GameInfo.PPM) - super.getHeight() / 2f;
         super.setPosition(bodyCenterX, bodyCenterY);
+    }
+
+    public void changeFilter() {
+        Filter filter = new Filter();
+        filter.categoryBits = GameInfo.DESTROYED;
+        this.fixture.setFilterData(filter);
+    }
+
+    public Fixture getFixture() {
+        return this.fixture;
     }
 }

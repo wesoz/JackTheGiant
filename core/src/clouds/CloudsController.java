@@ -101,6 +101,16 @@ public class CloudsController {
         }
     }
 
+    public void removeCollectables() {
+        for (int i = 0; i < this.collectables.size; i++) {
+            if (this.collectables.get(i).getFixture().getUserData() == "Remove") {
+                this.collectables.get(i).changeFilter();
+                this.collectables.get(i).getTexture().dispose();
+                this.collectables.removeIndex(i);
+            }
+        }
+    }
+
     public void createAndArrangeNewClouds() {
         float cloudOutOfScreenOffset = 15f;
         for (int i = 0; i < this.clouds.size; i++) {

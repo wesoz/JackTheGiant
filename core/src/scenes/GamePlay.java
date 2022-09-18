@@ -195,9 +195,11 @@ public class GamePlay implements Screen, ContactListener {
         }
 
         if (body1.getUserData() == "Player" && body2.getUserData() == "Coin") {
-            System.out.println("Collided with COIN");
+            body2.setUserData("Remove");
+            this.cloudsController.removeCollectables();
         } else if (body1.getUserData() == "Player" && body2.getUserData() == "Life") {
-            System.out.println("Collided with LIFE");
+            body2.setUserData("Remove");
+            this.cloudsController.removeCollectables();
         }
     }
 
