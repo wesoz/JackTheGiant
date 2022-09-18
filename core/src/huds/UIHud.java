@@ -21,16 +21,17 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jackthegiant.GameMain;
 
 import helpers.GameInfo;
+import scenes.MainMenu;
 
 public class UIHud {
     private GameMain game;
     private Stage stage;
     private Viewport gameViewport;
 
-    private Image coinImg, lifeImg, scoreImg;
+    private Image coinImg, lifeImg, scoreImg, pausePanel;
     private Label coinLabel, lifeLabel, scoreLabel;
 
-    private ImageButton pauseBtn;
+    private ImageButton pauseBtn, resumeBtn, quitBtn;
 
     public UIHud(GameMain game) {
         this.game = game;
@@ -89,9 +90,42 @@ public class UIHud {
         this.pauseBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                UIHud.this.createPausePanel();
             }
         });
+    }
+
+    void createPausePanel() {
+        this.pausePanel = new Image(new Texture("Buttons/Pause/Pause Panel.png"));
+        this.resumeBtn = new ImageButton(new SpriteDrawable(new Sprite(new Texture("Buttons/Pause/Resume.png"))));
+        this.quitBtn = new ImageButton(new SpriteDrawable(new Sprite(new Texture("Buttons/Pause/Quit 2.png"))));
+
+        this.pausePanel.setPosition(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, Align.center);
+        this.resumeBtn.setPosition(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f + 50f, Align.center);
+        this.quitBtn.setPosition(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f - 80f, Align.center);
+
+        this.resumeBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                UIHud.this.removePausePanel();
+            }
+        });
+        this.quitBtn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                UIHud.this.game.setScreen(new MainMenu(UIHud.this.game));
+            }
+        });
+
+        this.stage.addActor(this.pausePanel);
+        this.stage.addActor(this.resumeBtn);
+        this.stage.addActor(this.quitBtn);
+    }
+
+    void removePausePanel() {
+        this.pausePanel.remove();
+        this.resumeBtn.remove();
+        this.quitBtn.remove();
     }
 
     public Stage getStage() {
