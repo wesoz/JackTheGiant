@@ -38,14 +38,18 @@ public class Player extends Sprite {
     void createBody() {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(super.getX() / GameInfo.PPM, super.getY() / GameInfo.PPM);
+
+        bodyDef.position.set(
+                (super.getX() + super.getWidth() / 2f ) / GameInfo.PPM, // adding half of width cuz libgdx origin and box2d origin is not same
+                (super.getY() + super.getHeight() / 2f ) / GameInfo.PPM // same foes for height
+        );
 
         this.body = this.world.createBody(bodyDef);
         this.body.setFixedRotation(true);
 
         PolygonShape shape = new PolygonShape();
-        float boxWidthOffset = 20f;
-        shape.setAsBox((super.getWidth() / 2f - boxWidthOffset) / GameInfo.PPM, (super.getHeight() / 2f) / GameInfo.PPM);
+        float boxWidthOffset = -10f;
+        shape.setAsBox((super.getWidth() / 2f + boxWidthOffset) / GameInfo.PPM, (super.getHeight() / 2f) / GameInfo.PPM);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.density = 4; // the mass of the body

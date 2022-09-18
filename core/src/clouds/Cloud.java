@@ -29,10 +29,10 @@ public class Cloud extends Sprite {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
-        float centerXOffset = 0f;
-        float centerX = (super.getX() + centerXOffset) / GameInfo.PPM;
-        float centerY = (super.getY()) / GameInfo.PPM;
-        bodyDef.position.set(centerX, centerY);
+        bodyDef.position.set(
+                (super.getX() + super.getWidth() / 2f ) / GameInfo.PPM, // adding half of width cuz libgdx origin and box2d origin is not same
+                (super.getY() + super.getHeight() / 2f ) / GameInfo.PPM // same foes for height
+        );
 
         this.body = this.world.createBody(bodyDef);
 

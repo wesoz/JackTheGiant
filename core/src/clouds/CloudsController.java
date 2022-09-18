@@ -76,7 +76,7 @@ public class CloudsController {
                     c.setDrawLeft(true);
                 }
 
-                c.setSpritePosition(tempX, positionY);
+                c.setSpritePosition(tempX - c.getWidth() / 2f, positionY - c.getHeight() / 2f);
                 positionY -= this.DISTANCE_BETWEEN_CLOUDS;
                 lastCloudPositionY = positionY;
             }
@@ -86,9 +86,11 @@ public class CloudsController {
     public void drawClouds(SpriteBatch batch) {
         for (Cloud c: this.clouds) {
             if (c.isDrawLeft()) {
-                batch.draw(c.getTexture(), c.getX() - c.getWidth() / 2f - 20f, c.getY() - c.getHeight() / 2f);
+                //batch.draw(c, c.getX() - c.getWidth() / 2f - 20f, c.getY() - c.getHeight() / 2f);
+                c.draw(batch);
             } else {
-                batch.draw(c.getTexture(), c.getX() - c.getWidth() / 2f + 10f, c.getY() - c.getHeight() / 2f);
+                //batch.draw(c, c.getX() - c.getWidth() / 2f + 10f, c.getY() - c.getHeight() / 2f);
+                c.draw(batch);
             }
         }
     }
@@ -113,7 +115,8 @@ public class CloudsController {
     }
 
     public Player positionPlayer() {
-        return new Player(this.world, clouds.get(0).getX(), clouds.get(0).getY() + 100f);
+        Cloud topCloud = clouds.get(0);
+        return new Player(this.world, topCloud.getX() + topCloud.getWidth() / 2f, topCloud.getY() + topCloud.getHeight() / 2f + 100f);
     }
 
     private float randomBetweenNumber(float min, float max) {
