@@ -80,10 +80,11 @@ public class GamePlay implements Screen, ContactListener {
 
     void update(float dt) {
         this.handleInput(dt);
-        //this.moveCamera();
+        this.moveCamera();
         this.checkBackgroundsOutOfBounds();
         this.cloudsController.setCameraY(mainCamera.position.y);
         this.cloudsController.createAndArrangeNewClouds();
+        this.cloudsController.removeOffScreenCollectables();
     }
 
     void moveCamera() {
@@ -144,10 +145,12 @@ public class GamePlay implements Screen, ContactListener {
 
         this.debugRenderer.render(world, box2DCamera.combined);
 
-        this.game.getBatch().setProjectionMatrix(this.mainCamera.combined);
-        this.mainCamera.update();
         this.game.getBatch().setProjectionMatrix(this.hud.getStage().getCamera().combined);
         this.hud.getStage().draw();
+
+        this.game.getBatch().setProjectionMatrix(this.mainCamera.combined);
+        this.mainCamera.update();
+
         this.player.updatePlayer();
         this.world.step(Gdx.graphics.getDeltaTime(), 6, 2);
     }

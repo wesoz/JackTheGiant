@@ -70,22 +70,34 @@ public class CloudsController {
                 float tempX = 0;
 
                 if (controlX == 0) {
-                    tempX = this.randomBetweenNumber(maxX - 40, maxX);
+                    tempX = this.randomBetweenNumber(maxX - 10, maxX);
                     controlX = 1;
                 } else if (controlX == 1) {
-                    tempX = this.randomBetweenNumber(minX + 40, minX);
+                    tempX = this.randomBetweenNumber(minX + 10, minX);
                     controlX = 0;
                 }
 
                 c.setSpritePosition(tempX - c.getWidth() / 2f, positionY - c.getHeight() / 2f);
                 positionY -= this.DISTANCE_BETWEEN_CLOUDS;
                 lastCloudPositionY = positionY;
+
+                if (!firstTimeArranging && c.getCloudName() != "Dark Cloud") {
+                    int rand = random.nextInt(10);
+                    if (rand > 5) {
+                        int randomCollectable = random.nextInt(2);
+                        if (randomCollectable == 0) {
+                            Collectable collectable = new Collectable(this.world, "Life");
+                            collectable.setCollectablePosition(c.getX() + c.getWidth() / 2f - collectable.getWidth() / 2f, c.getY() + c.getHeight() / 2f + 40f);
+                            this.collectables.add(collectable);
+                        } else {
+                            Collectable collectable = new Collectable(this.world, "Coin");
+                            collectable.setCollectablePosition(c.getX() + c.getWidth() / 2f - collectable.getWidth() / 2f, c.getY() + c.getHeight() / 2f + 40f);
+                            this.collectables.add(collectable);
+                        }
+                    }
+                }
             }
         }
-
-        Collectable c1 = new Collectable(this.world, "Coin");
-        c1.setCollectablePosition(this.clouds.get(1).getX() + this.clouds.get(1).getWidth() / 2f - c1.getWidth() / 2f, this.clouds.get(1).getY() + this.clouds.get(1).getHeight() / 2f + 40f);
-        this.collectables.add(c1);
     }
 
     public void drawClouds(SpriteBatch batch) {
@@ -123,6 +135,15 @@ public class CloudsController {
         if (this.clouds.size == 4) {
             this.createClouds();
             this.positionClouds(false);
+        }
+    }
+
+    public void removeOffScreenCollectables() {
+        for (int i = 0; i < this.collectables.size; i++) {
+            if ((this.collectables.get(i).getY() - GameInfo.HEIGHT / 2f - 15) > this.cameraY) {
+                this.collectables.get(i).getTexture().dispose();
+                this.collectables.removeIndex(i);
+            }
         }
     }
 
