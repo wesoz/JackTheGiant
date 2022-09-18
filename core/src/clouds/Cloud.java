@@ -57,12 +57,4 @@ public class Cloud extends Sprite {
     public String getCloudName() {
         return cloudName;
     }
-
-    public boolean isDrawLeft() {
-        return drawLeft;
-    }
-
-    public void setDrawLeft(boolean drawLeft) {
-        this.drawLeft = drawLeft;
-    }
 }
