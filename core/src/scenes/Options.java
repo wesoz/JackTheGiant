@@ -71,6 +71,7 @@ public class Options implements Screen {
 
     @Override
     public void dispose() {
-
+        this.bg.dispose();
+        this.btns.getStage().dispose();
     }
 }
