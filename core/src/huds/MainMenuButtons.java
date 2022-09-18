@@ -16,6 +16,7 @@ import com.mygdx.jackthegiant.GameMain;
 
 import helpers.GameInfo;
 import scenes.GamePlay;
+import scenes.Highscore;
 
 public class MainMenuButtons {
     private GameMain game;
@@ -53,7 +54,7 @@ public class MainMenuButtons {
         this.highscoreBtn.setPosition(GameInfo.WIDTH / 2f - 60, GameInfo.HEIGHT / 2f - 20, Align.center);
         this.optionsBtn.setPosition(GameInfo.WIDTH / 2f - 40, GameInfo.HEIGHT / 2f - 90, Align.center);
         this.quitBtn.setPosition(GameInfo.WIDTH / 2f - 20, GameInfo.HEIGHT / 2f - 160, Align.center);
-        this.musicBtn.setPosition(GameInfo.WIDTH / 2f - 13, 13, Align.center);
+        this.musicBtn.setPosition(GameInfo.WIDTH - 13, 13, Align.bottomRight);
     }
 
     void addAllListeners() {
@@ -66,7 +67,7 @@ public class MainMenuButtons {
         this.highscoreBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                MainMenuButtons.this.game.setScreen(new Highscore(MainMenuButtons.this.game));
             }
         });
         this.optionsBtn.addListener(new ChangeListener() {

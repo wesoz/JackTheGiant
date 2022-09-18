@@ -9,25 +9,24 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jackthegiant.GameMain;
 
 import helpers.GameInfo;
-import huds.MainMenuButtons;
+import huds.HighscoreButtons;
 
-public class MainMenu implements Screen {
-
+public class Highscore implements Screen {
     private GameMain game;
-
     private OrthographicCamera mainCamera;
     private Viewport gameViewport;
     private Texture bg;
-    private MainMenuButtons btns;
 
-    public MainMenu(GameMain game) {
+    private HighscoreButtons btns;
+
+    public Highscore(GameMain game) {
         this.game = game;
-        this.bg = new Texture("Backgrounds/Menu BG.png");
         this.mainCamera = new OrthographicCamera();
         this.mainCamera.setToOrtho(false, GameInfo.WIDTH, GameInfo.HEIGHT);
         this.mainCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
-        this.gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, mainCamera);
-        this.btns = new MainMenuButtons(this.game);
+        this.gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, this.mainCamera);
+        this.bg = new Texture("Backgrounds/Highscore BG.png");
+        this.btns = new HighscoreButtons(this.game);
     }
 
     @Override
@@ -72,6 +71,5 @@ public class MainMenu implements Screen {
     @Override
     public void dispose() {
         this.bg.dispose();
-        this.btns.getStage().dispose();
     }
 }
