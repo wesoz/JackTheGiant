@@ -21,6 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jackthegiant.GameMain;
 
 import helpers.GameInfo;
+import helpers.GameManager;
 import scenes.MainMenu;
 
 public class UIHud {
@@ -38,6 +39,14 @@ public class UIHud {
         this.gameViewport = new FitViewport(GameInfo.WIDTH, GameInfo.HEIGHT, new OrthographicCamera());
         this.stage = new Stage(gameViewport, this.game.getBatch());
         Gdx.input.setInputProcessor(this.stage);
+
+        if (GameManager.getInstance().gameStartedFromMainMenu) {
+            GameManager.getInstance().gameStartedFromMainMenu = false;
+            GameManager.getInstance().lifeScore = 2;
+            GameManager.getInstance().coinScore = 0;
+            GameManager.getInstance().score = 0;
+        }
+
         this.createLabels();
         this.createImages();
         this.createButtonAndAddListener();
@@ -71,9 +80,9 @@ public class UIHud {
         parameter.size = 40;
 
         BitmapFont font = generator.generateFont(parameter);
-        this.coinLabel = new Label("x0", new Label.LabelStyle(font, Color.WHITE));
-        this.lifeLabel = new Label("x2", new Label.LabelStyle(font, Color.WHITE));
-        this.scoreLabel = new Label("100", new Label.LabelStyle(font, Color.WHITE));
+        this.coinLabel = new Label("x" + GameManager.getInstance().coinScore, new Label.LabelStyle(font, Color.WHITE));
+        this.lifeLabel = new Label("x" + GameManager.getInstance().lifeScore, new Label.LabelStyle(font, Color.WHITE));
+        this.scoreLabel = new Label(String.valueOf(GameManager.getInstance().score), new Label.LabelStyle(font, Color.WHITE));
     }
 
     void createImages() {
@@ -90,7 +99,10 @@ public class UIHud {
         this.pauseBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                UIHud.this.createPausePanel();
+                if (!GameManager.getInstance().isPaused) {
+                    GameManager.getInstance().isPaused = true;
+                    UIHud.this.createPausePanel();
+                }
             }
         });
     }
@@ -107,6 +119,7 @@ public class UIHud {
         this.resumeBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                GameManager.getInstance().isPaused = false;
                 UIHud.this.removePausePanel();
             }
         });
@@ -126,6 +139,23 @@ public class UIHud {
         this.pausePanel.remove();
         this.resumeBtn.remove();
         this.quitBtn.remove();
+    }
+
+    public void incrementScore(int score) {
+        GameManager.getInstance().score += score;
+        this.scoreLabel.setText(String.valueOf(GameManager.getInstance().score));
+    }
+
+    public void incrementCoin() {
+        GameManager.getInstance().coinScore++;
+        this.coinLabel.setText("x" + GameManager.getInstance().coinScore);
+        this.incrementScore(200);
+    }
+
+    public void incrementLife() {
+        GameManager.getInstance().lifeScore++;
+        this.lifeLabel.setText("x" + GameManager.getInstance().lifeScore);
+        this.incrementScore(300);
     }
 
     public Stage getStage() {

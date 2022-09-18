@@ -23,6 +23,7 @@ import com.mygdx.jackthegiant.GameMain;
 import Player.Player;
 import clouds.CloudsController;
 import helpers.GameInfo;
+import helpers.GameManager;
 import huds.UIHud;
 
 public class GamePlay implements Screen, ContactListener {
@@ -38,6 +39,7 @@ public class GamePlay implements Screen, ContactListener {
 
     private Sprite[] bgs;
     private float lastYPosition;
+    private boolean touchedForTheFirstTime;
     private UIHud hud;
     private CloudsController cloudsController;
     private Player player;
@@ -78,13 +80,25 @@ public class GamePlay implements Screen, ContactListener {
         }
     }
 
+    void checkForFirstTouch() {
+        if (!this.touchedForTheFirstTime) {
+            if (Gdx.input.justTouched()) {
+                this.touchedForTheFirstTime = true;
+                GameManager.getInstance().isPaused = false;
+            }
+        }
+    }
+
     void update(float dt) {
-        this.handleInput(dt);
-        this.moveCamera();
-        this.checkBackgroundsOutOfBounds();
-        this.cloudsController.setCameraY(mainCamera.position.y);
-        this.cloudsController.createAndArrangeNewClouds();
-        this.cloudsController.removeOffScreenCollectables();
+        this.checkForFirstTouch();;
+        if (!GameManager.getInstance().isPaused) {
+            this.handleInput(dt);
+            this.moveCamera();
+            this.checkBackgroundsOutOfBounds();
+            this.cloudsController.setCameraY(mainCamera.position.y);
+            this.cloudsController.createAndArrangeNewClouds();
+            this.cloudsController.removeOffScreenCollectables();
+        }
     }
 
     void moveCamera() {
@@ -199,9 +213,11 @@ public class GamePlay implements Screen, ContactListener {
 
         if (body1.getUserData() == "Player" && body2.getUserData() == "Coin") {
             body2.setUserData("Remove");
+            this.hud.incrementCoin();
             this.cloudsController.removeCollectables();
         } else if (body1.getUserData() == "Player" && body2.getUserData() == "Life") {
             body2.setUserData("Remove");
+            this.hud.incrementLife();
             this.cloudsController.removeCollectables();
         }
     }
