@@ -43,6 +43,7 @@ public class GamePlay implements Screen, ContactListener {
     private UIHud hud;
     private CloudsController cloudsController;
     private Player player;
+    private float lastPlayerY;
 
     public GamePlay(GameMain game) {
         this.game = game;
@@ -85,6 +86,7 @@ public class GamePlay implements Screen, ContactListener {
             if (Gdx.input.justTouched()) {
                 this.touchedForTheFirstTime = true;
                 GameManager.getInstance().isPaused = false;
+                this.lastYPosition = this.player.getY();
             }
         }
     }
@@ -99,11 +101,12 @@ public class GamePlay implements Screen, ContactListener {
             this.cloudsController.createAndArrangeNewClouds();
             this.cloudsController.removeOffScreenCollectables();
             this.checkPlayersBounds();
+            this.countScore();
         }
     }
 
     void moveCamera() {
-        this.mainCamera.position.y -= 3;
+        this.mainCamera.position.y -= 3; 
     }
 
     void createBackgrounds() {
@@ -149,6 +152,13 @@ public class GamePlay implements Screen, ContactListener {
         }
     }
 
+    void countScore() {
+        if (this.lastPlayerY > this.player.getY()) {
+            this.hud.incrementScore(1);
+            this.lastPlayerY = this.player.getY();
+        }
+    }
+
     @Override
     public void show() {
 
@@ -171,7 +181,7 @@ public class GamePlay implements Screen, ContactListener {
 
         this.game.getBatch().end();
 
-        this.debugRenderer.render(world, box2DCamera.combined);
+        this.debugRenderer.render(world, this.box2DCamera.combined);
 
         this.game.getBatch().setProjectionMatrix(this.hud.getStage().getCamera().combined);
         this.hud.getStage().draw();
