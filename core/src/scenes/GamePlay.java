@@ -106,7 +106,7 @@ public class GamePlay implements Screen, ContactListener {
     }
 
     void moveCamera() {
-        this.mainCamera.position.y -= 3; 
+        this.mainCamera.position.y -= 3;
     }
 
     void createBackgrounds() {
@@ -141,14 +141,17 @@ public class GamePlay implements Screen, ContactListener {
 
     void checkPlayersBounds() {
         if (this.player.getY() - GameInfo.HEIGHT / 2f - this.player.getHeight() / 2f > this.mainCamera.position.y) {
-            System.out.println("Player out of bounds");
-            GameManager.getInstance().isPaused = true;
+            if (!this.player.isDead()) {
+                this.playerDied();
+            }
         } else if (this.player.getY() + GameInfo.HEIGHT / 2f + this.player.getHeight() / 2f < this.mainCamera.position.y) {
-            System.out.println("Player out of bounds");
-            GameManager.getInstance().isPaused = true;
+            if (!this.player.isDead()) {
+                this.playerDied();
+            }
         } else if (this.player.getX() - this.player.getWidth() / 2f > GameInfo.WIDTH || this.player.getX() + this.player.getWidth() / 2f < 0) {
-            System.out.println("Player out of bounds HORIZONTALLY");
-            GameManager.getInstance().isPaused = true;
+            if (!this.player.isDead()) {
+                this.playerDied();
+            }
         }
     }
 
@@ -156,6 +159,19 @@ public class GamePlay implements Screen, ContactListener {
         if (this.lastPlayerY > this.player.getY()) {
             this.hud.incrementScore(1);
             this.lastPlayerY = this.player.getY();
+        }
+    }
+
+    void playerDied() {
+        GameManager.getInstance().isPaused = true;
+        this.hud.decrementLife();
+        this.player.setDead(true);
+        this.player.setPosition(1000f, 1000f);
+        if (GameManager.getInstance().lifeScore < 0) {
+            // check if new highscore
+            this.game.setScreen(new MainMenu(this.game));
+        } else {
+            this.game.setScreen(new GamePlay(this.game));
         }
     }
 
@@ -243,6 +259,12 @@ public class GamePlay implements Screen, ContactListener {
             body2.setUserData("Remove");
             this.hud.incrementLife();
             this.cloudsController.removeCollectables();
+        }
+
+        if (body1.getUserData() == "Player" && body2.getUserData() == "Dark Cloud") {
+            if (!this.player.isDead()) {
+                this.playerDied();
+            }
         }
     }
 
