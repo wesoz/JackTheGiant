@@ -1,6 +1,7 @@
 package huds;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -21,6 +22,7 @@ import helpers.GameInfo;
 import helpers.GameManager;
 import scenes.GamePlay;
 import scenes.Highscore;
+import scenes.MainMenu;
 import scenes.Options;
 
 public class MainMenuButtons {
@@ -34,7 +36,9 @@ public class MainMenuButtons {
     private ImageButton quitBtn;
     private ImageButton musicBtn;
 
-    public MainMenuButtons(GameMain game) {
+    private Sound clickSound;
+
+    public MainMenuButtons(GameMain game, Sound clickSound) {
         this.game = game;
         this.gameViewport = new FitViewport(GameInfo.WIDTH, GameInfo.HEIGHT, new OrthographicCamera());
         this.stage = new Stage(gameViewport, this.game.getBatch());
@@ -46,6 +50,8 @@ public class MainMenuButtons {
         this.stage.addActor(this.optionsBtn);
         this.stage.addActor(this.quitBtn);
         this.stage.addActor(this.musicBtn);
+        this.checkMusic();
+        this.clickSound = clickSound;
     }
 
     void createAndPositionButtons() {
@@ -66,6 +72,7 @@ public class MainMenuButtons {
         this.playBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                MainMenuButtons.this.clickSound.play();
                 GameManager.getInstance().gameStartedFromMainMenu = true;
                 RunnableAction run = new RunnableAction();
                 run.setRunnable(new Runnable() {
@@ -83,27 +90,44 @@ public class MainMenuButtons {
         this.highscoreBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                MainMenuButtons.this.clickSound.play();
                 MainMenuButtons.this.game.setScreen(new Highscore(MainMenuButtons.this.game));
             }
         });
         this.optionsBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                MainMenuButtons.this.clickSound.play();
                 MainMenuButtons.this.game.setScreen(new Options(MainMenuButtons.this.game));
             }
         });
         this.quitBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-
+                Gdx.app.exit();
             }
         });
         this.musicBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
+                MainMenuButtons.this.clickSound.play();
+                if (GameManager.getInstance().gameData.isMusicOn()) {
+                    GameManager.getInstance().gameData.setMusicOn(false);
+                    GameManager.getInstance().stopMusic();
+                } else {
+                    GameManager.getInstance().gameData.setMusicOn(true);
+                    GameManager.getInstance().playMusic();
+                }
 
+                GameManager.getInstance().saveData();
             }
         });
+    }
+
+    void checkMusic() {
+        if (GameManager.getInstance().gameData.isMusicOn()) {
+            GameManager.getInstance().playMusic();
+        }
     }
 
     public Stage getStage() {

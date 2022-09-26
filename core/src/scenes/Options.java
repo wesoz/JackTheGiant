@@ -1,6 +1,8 @@
 package scenes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -19,6 +21,7 @@ public class Options implements Screen {
     private Viewport gameViewport;
     private Texture bg;
     private OptionsButtons btns;
+    private Sound clickSound;
 
     public Options(GameMain game) {
         this.game = game;
@@ -27,7 +30,8 @@ public class Options implements Screen {
         this.mainCamera.position.set(GameInfo.WIDTH / 2f, GameInfo.HEIGHT / 2f, 0);
         this.gameViewport = new StretchViewport(GameInfo.WIDTH, GameInfo.HEIGHT, mainCamera);
         this.bg = new Texture("Backgrounds/Options BG.png");
-        this.btns = new OptionsButtons(this.game);
+        this.clickSound = Gdx.audio.newSound(Gdx.files.internal("Sounds/Click Sound.wav"));
+        this.btns = new OptionsButtons(this.game, this.clickSound);
     }
 
     @Override
@@ -73,5 +77,6 @@ public class Options implements Screen {
     public void dispose() {
         this.bg.dispose();
         this.btns.getStage().dispose();
+        this.clickSound.dispose();
     }
 }

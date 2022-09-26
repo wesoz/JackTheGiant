@@ -1,6 +1,7 @@
 package huds;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -30,8 +31,9 @@ public class OptionsButtons {
 
     private ImageButton easy, medium, hard, backBtn;
     private Image sign;
+    private Sound clickSound;
 
-    public OptionsButtons(GameMain game) {
+    public OptionsButtons(GameMain game, Sound clickSound) {
         this.game = game;
         this.gameViewport = new FitViewport(GameInfo.WIDTH, GameInfo.HEIGHT, new OrthographicCamera());
         this.stage = new Stage(gameViewport, this.game.getBatch());
@@ -43,6 +45,7 @@ public class OptionsButtons {
         this.stage.addActor(this.hard);
         this.stage.addActor(this.backBtn);
         this.stage.addActor(this.sign);
+        this.clickSound = clickSound;
     }
 
     void createAndPositionUIElements() {
@@ -88,6 +91,7 @@ public class OptionsButtons {
     }
 
     void changeDifficulty(int difficulty) {
+        clickSound.play();
         GameManager.getInstance().gameData.setEasyDifficulty(difficulty == 0);
         GameManager.getInstance().gameData.setMediumDifficulty(difficulty == 1);
         GameManager.getInstance().gameData.setHardDifficulty(difficulty == 2);
