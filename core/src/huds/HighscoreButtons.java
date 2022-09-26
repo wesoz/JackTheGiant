@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.jackthegiant.GameMain;
 
 import helpers.GameInfo;
+import helpers.GameManager;
 import scenes.MainMenu;
 
 public class HighscoreButtons {
@@ -50,8 +51,8 @@ public class HighscoreButtons {
         BitmapFont scoreFont = generator.generateFont(parameter);
         BitmapFont coinFont = generator.generateFont(parameter);
 
-        this.scoreLabel = new Label("100", new Label.LabelStyle(scoreFont, Color.WHITE));
-        this.coinLabel = new Label("100", new Label.LabelStyle(coinFont, Color.WHITE));
+        this.scoreLabel = new Label(String.valueOf(GameManager.getInstance().gameData.getHighscore()), new Label.LabelStyle(scoreFont, Color.WHITE));
+        this.coinLabel = new Label(String.valueOf(GameManager.getInstance().gameData.getCoinHighscore()), new Label.LabelStyle(coinFont, Color.WHITE));
 
         this.backBtn.addListener(new ChangeListener() {
             @Override

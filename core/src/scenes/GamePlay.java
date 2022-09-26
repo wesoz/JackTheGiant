@@ -171,6 +171,8 @@ public class GamePlay implements Screen, ContactListener {
         this.player.setDead(true);
         this.player.setPosition(1000f, 1000f);
         if (GameManager.getInstance().lifeScore < 0) {
+            GameManager.getInstance().checkForNewHighscore();
+
             this.hud.createGameOverPanel();
 
             RunnableAction run = new RunnableAction();
