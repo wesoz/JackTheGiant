@@ -15,6 +15,9 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -169,9 +172,34 @@ public class GamePlay implements Screen, ContactListener {
         this.player.setPosition(1000f, 1000f);
         if (GameManager.getInstance().lifeScore < 0) {
             // check if new highscore
-            this.game.setScreen(new MainMenu(this.game));
+
+            RunnableAction run = new RunnableAction();
+            run.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    GamePlay.this.game.setScreen(new MainMenu(GamePlay.this.game));
+                }
+            });
+            SequenceAction sa = new SequenceAction();
+            sa.addAction(Actions.delay(3f));
+            sa.addAction(Actions.fadeOut(1f));
+            sa.addAction(run);
+
+            this.hud.getStage().addAction(sa);
         } else {
-            this.game.setScreen(new GamePlay(this.game));
+            RunnableAction run = new RunnableAction();
+            run.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    GamePlay.this.game.setScreen(new GamePlay(GamePlay.this.game));
+                }
+            });
+            SequenceAction sa = new SequenceAction();
+            sa.addAction(Actions.delay(3f));
+            sa.addAction(Actions.fadeOut(1f));
+            sa.addAction(run);
+
+            this.hud.getStage().addAction(sa);
         }
     }
 
@@ -185,7 +213,7 @@ public class GamePlay implements Screen, ContactListener {
 
         this.update(delta);
 
-        ScreenUtils.clear(1, 0, 0, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
 
         this.game.getBatch().begin();
 
@@ -197,10 +225,11 @@ public class GamePlay implements Screen, ContactListener {
 
         this.game.getBatch().end();
 
-        this.debugRenderer.render(world, this.box2DCamera.combined);
+        // this.debugRenderer.render(world, this.box2DCamera.combined);
 
         this.game.getBatch().setProjectionMatrix(this.hud.getStage().getCamera().combined);
         this.hud.getStage().draw();
+        this.hud.getStage().act();
 
         this.game.getBatch().setProjectionMatrix(this.mainCamera.combined);
         this.mainCamera.update();

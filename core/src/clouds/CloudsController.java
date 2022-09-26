@@ -102,7 +102,8 @@ public class CloudsController {
 
     public void drawClouds(SpriteBatch batch) {
         for (Cloud c: this.clouds) {
-            c.draw(batch);
+            //c.draw(batch);
+            batch.draw(c, c.getX(), c.getY());
         }
     }
 

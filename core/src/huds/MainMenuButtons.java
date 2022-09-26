@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
@@ -64,7 +67,17 @@ public class MainMenuButtons {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GameManager.getInstance().gameStartedFromMainMenu = true;
-                MainMenuButtons.this.game.setScreen(new GamePlay(MainMenuButtons.this.game));
+                RunnableAction run = new RunnableAction();
+                run.setRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        MainMenuButtons.this.game.setScreen(new GamePlay(MainMenuButtons.this.game));
+                    }
+                });
+                SequenceAction sa = new SequenceAction();
+                sa.addAction(Actions.fadeOut(0.5f));
+                sa.addAction(run);
+                MainMenuButtons.this.getStage().addAction(sa);
             }
         });
         this.highscoreBtn.addListener(new ChangeListener() {

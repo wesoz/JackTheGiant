@@ -36,7 +36,7 @@ public class Highscore implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(1, 0, 0, 1);
+        ScreenUtils.clear(0, 0, 0, 1);
 
         this.game.getBatch().begin();
 
