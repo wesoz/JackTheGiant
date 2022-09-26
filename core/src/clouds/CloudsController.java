@@ -9,6 +9,7 @@ import java.util.Random;
 import Player.Player;
 import collectables.Collectable;
 import helpers.GameInfo;
+import helpers.GameManager;
 
 public class CloudsController {
 
@@ -85,7 +86,7 @@ public class CloudsController {
                     int rand = random.nextInt(10);
                     if (rand > 5) {
                         int randomCollectable = random.nextInt(2);
-                        if (randomCollectable == 0) {
+                        if (randomCollectable == 0 && GameManager.getInstance().lifeScore < 2) {
                             Collectable collectable = new Collectable(this.world, "Life");
                             collectable.setCollectablePosition(c.getX() + c.getWidth() / 2f - collectable.getWidth() / 2f, c.getY() + c.getHeight() / 2f + 40f);
                             this.collectables.add(collectable);
