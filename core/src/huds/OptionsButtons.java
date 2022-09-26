@@ -88,25 +88,6 @@ public class OptionsButtons {
     }
 
     void changeDifficulty(int difficulty) {
-        /*
-        switch (difficulty) {
-            case 0:
-                GameManager.getInstance().gameData.setEasyDifficulty(true);
-                GameManager.getInstance().gameData.setMediumDifficulty(false);
-                GameManager.getInstance().gameData.setHardDifficulty(false);
-                break;
-            case 1:
-                GameManager.getInstance().gameData.setEasyDifficulty(false);
-                GameManager.getInstance().gameData.setMediumDifficulty(true);
-                GameManager.getInstance().gameData.setHardDifficulty(false);
-                break;
-            case 2:
-                GameManager.getInstance().gameData.setEasyDifficulty(false);
-                GameManager.getInstance().gameData.setMediumDifficulty(false);
-                GameManager.getInstance().gameData.setHardDifficulty(true);
-                break;
-        }
-        */
         GameManager.getInstance().gameData.setEasyDifficulty(difficulty == 0);
         GameManager.getInstance().gameData.setMediumDifficulty(difficulty == 1);
         GameManager.getInstance().gameData.setHardDifficulty(difficulty == 2);

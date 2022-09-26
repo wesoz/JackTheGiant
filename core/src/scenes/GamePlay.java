@@ -48,6 +48,10 @@ public class GamePlay implements Screen, ContactListener {
     private Player player;
     private float lastPlayerY;
 
+    private float cameraSpeed = 10f;
+    private float cameraMaxSpeed = 10f;
+    private float cameraAcceleration = 10f;
+
     public GamePlay(GameMain game) {
         this.game = game;
 
@@ -72,6 +76,7 @@ public class GamePlay implements Screen, ContactListener {
         this.player = this.cloudsController.positionPlayer();
 
         this.createBackgrounds();
+        this.setCameraSpeed();
     }
 
     void handleInput(float dt) {
@@ -98,7 +103,7 @@ public class GamePlay implements Screen, ContactListener {
         this.checkForFirstTouch();;
         if (!GameManager.getInstance().isPaused) {
             this.handleInput(dt);
-            this.moveCamera();
+            this.moveCamera(dt);
             this.checkBackgroundsOutOfBounds();
             this.cloudsController.setCameraY(mainCamera.position.y);
             this.cloudsController.createAndArrangeNewClouds();
@@ -108,8 +113,26 @@ public class GamePlay implements Screen, ContactListener {
         }
     }
 
-    void moveCamera() {
-        this.mainCamera.position.y -= 3;
+    void moveCamera(float delta) {
+
+        this.mainCamera.position.y -= this.cameraSpeed * delta;
+        this.cameraSpeed += this.cameraAcceleration * delta;
+        if (this.cameraSpeed > this.cameraMaxSpeed) {
+            this.cameraSpeed = this.cameraMaxSpeed;
+        }
+    }
+
+    void setCameraSpeed() {
+        if (GameManager.getInstance().gameData.isEasyDifficulty()) {
+            this.cameraSpeed = 80f;
+            this.cameraMaxSpeed = 100f;
+        } else if (GameManager.getInstance().gameData.isEasyDifficulty()) {
+            this.cameraSpeed = 100f;
+            this.cameraMaxSpeed = 120f;
+        } else {
+            this.cameraSpeed = 120f;
+            this.cameraMaxSpeed = 140f;
+        }
     }
 
     void createBackgrounds() {
