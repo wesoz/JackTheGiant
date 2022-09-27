@@ -95,6 +95,18 @@ public class GamePlay implements Screen, ContactListener {
         }
     }
 
+    void handleInputAndroid() {
+        if (Gdx.input.isTouched()) {
+            if (Gdx.input.getX() > GameInfo.WIDTH / 2f) {
+                this.player.movePlayer(2f);
+            } else {
+                this.player.movePlayer(-2f);
+            }
+        } else {
+            this.player.setWalking(false);
+        }
+    }
+
     void checkForFirstTouch() {
         if (!this.touchedForTheFirstTime) {
             if (Gdx.input.justTouched()) {
@@ -109,6 +121,7 @@ public class GamePlay implements Screen, ContactListener {
         this.checkForFirstTouch();;
         if (!GameManager.getInstance().isPaused) {
             this.handleInput(dt);
+            this.handleInputAndroid();
             this.moveCamera(dt);
             this.checkBackgroundsOutOfBounds();
             this.cloudsController.setCameraY(mainCamera.position.y);
